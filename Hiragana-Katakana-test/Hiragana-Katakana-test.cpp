@@ -7,6 +7,7 @@
 #include<cstdlib>
 using namespace std;
 using namespace TgBot;
+#pragma execution_character_set("utf-8")
 
 
 
@@ -461,7 +462,7 @@ int main() {
                         EasyK_kb->inlineKeyboard.push_back({ finish });
                         break;
                 }
-
+                bot.getApi().sendMessage(query->message->chat->id, selectedQuestionableGlyph, false, 0, EasyK_kb);
                 ++currentIndex;
 
             }
@@ -487,7 +488,17 @@ int main() {
         
         
         
-        
+        bot.getEvents().onCallbackQuery([&bot](CallbackQuery::Ptr query) {
+
+            if (query->data == "RightAnswer")
+            {
+                bot.getApi().sendMessage(query->message->chat->id, "Correct");
+            }
+            if (query->data == "WrongAnswer")
+            {
+                bot.getApi().sendMessage(query->message->chat->id, "Incorrect");
+            }
+            });
         
         
         
