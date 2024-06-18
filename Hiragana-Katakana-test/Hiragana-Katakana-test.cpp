@@ -288,6 +288,7 @@ int main() {
             if (currentIndex < keys.size())
             {
                 int randomKeyfromVector = keys[currentIndex];
+                int operableNumber = randomKeyfromVector;
                 string selectedQuestionableGlyph = EasyK_Glyph[randomKeyfromVector]; // glyph To
                 string selectedAnswerforGlyph = EasyK[randomKeyfromVector];  // To 
 
@@ -323,10 +324,11 @@ int main() {
                 uniform_int_distribution<> dis2(1, 20);
                 int randomPos = dis1(gen);
                 set<int> uniqueOptions;
-                uniqueOptions.insert(dis2(gen));
+                uniqueOptions.insert(randomKeyfromVector);
 
-                while (uniqueOptions.size() < 4) {
-                    uniqueOptions.insert(dis2(gen));
+                while (uniqueOptions.size() < 5) {
+                    int randomNumber = dis2(gen);
+                    uniqueOptions.insert(randomNumber);
                 }
 
                 auto it = uniqueOptions.begin();
@@ -334,7 +336,7 @@ int main() {
                 int randomoption3 = *it++;
                 int randomoption4 = *it++;
                 int randomoption5 = *it++;
-                cout << randomoption2 << randomoption3 << randomoption4 << randomoption5 << endl;
+                cout << randomoption2 << endl << randomoption3 << endl << randomoption4 << endl << randomoption5 << endl;
                 string option2text = EasyK[randomoption2];
                 string option3text = EasyK[randomoption3];
                 string option4text = EasyK[randomoption4];
@@ -570,6 +572,7 @@ int main() {
                 if (currentIndex < keys.size())
                 {
                     int randomKeyfromVector = keys[currentIndex];
+                    int operableNumber = randomKeyfromVector;
                     string selectedQuestionableGlyph = EasyK_Glyph[randomKeyfromVector]; // glyph To
                     string selectedAnswerforGlyph = EasyK[randomKeyfromVector];  // To 
 
@@ -591,10 +594,11 @@ int main() {
                     uniform_int_distribution<> dis2(1, 20);
                     int randomPos = dis1(gen);
                     set<int> uniqueOptions;
-                    uniqueOptions.insert(dis2(gen));
+                    uniqueOptions.insert(randomKeyfromVector);
 
-                    while (uniqueOptions.size() < 4) {
-                        uniqueOptions.insert(dis2(gen));
+                    while (uniqueOptions.size() < 5) {
+                        int randomNumber = dis2(gen);
+                        uniqueOptions.insert(randomNumber);
                     }
 
                     auto it = uniqueOptions.begin();
@@ -603,10 +607,10 @@ int main() {
                     int randomoption4 = *it++;
                     int randomoption5 = *it++;
                     cout << randomoption2 << endl << randomoption3 << endl << randomoption4 << endl << randomoption5 << endl;
-                    string option2text = EasyK[randomoption2 - 1];
-                    string option3text = EasyK[randomoption3 - 1];
-                    string option4text = EasyK[randomoption4 - 1];
-                    string option5text = EasyK[randomoption5 - 1];
+                    string option2text = EasyK[randomoption2];
+                    string option3text = EasyK[randomoption3];
+                    string option4text = EasyK[randomoption4];
+                    string option5text = EasyK[randomoption5];
 
                     switch (randomPos)
                     {
