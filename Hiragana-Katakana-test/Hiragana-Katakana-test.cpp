@@ -5,6 +5,7 @@
 #include <ctime>
 #include <stdlib.h>
 #include<cstdlib>
+#include <set>
 using namespace std;
 using namespace TgBot;
 #pragma execution_character_set("utf-8")
@@ -302,19 +303,44 @@ int main() {
                 InlineKeyboardButton::Ptr finish(new InlineKeyboardButton);
 
 
+                //random_device rd;
+                //mt19937 gen(rd());
+                //uniform_int_distribution<> dis1(1, 5);
+                //uniform_int_distribution<> dis2(1, 20);
+                //int randomPos = dis1(gen);
+                //int randomoption2 = dis2(gen);
+                //int randomoption3 = dis2(gen);
+                //int randomoption4 = dis2(gen);
+                //int randomoption5 = dis2(gen);
+                //string option2text = EasyK[randomoption2 - 1];
+                //string option3text = EasyK[randomoption3 - 1];
+                //string option4text = EasyK[randomoption4 - 1];
+                //string option5text = EasyK[randomoption5 - 1];
+
                 random_device rd;
                 mt19937 gen(rd());
                 uniform_int_distribution<> dis1(1, 5);
                 uniform_int_distribution<> dis2(1, 20);
                 int randomPos = dis1(gen);
-                int randomoption2 = dis2(gen);
-                int randomoption3 = dis2(gen);
-                int randomoption4 = dis2(gen);
-                int randomoption5 = dis2(gen);
+                set<int> uniqueOptions;
+                uniqueOptions.insert(dis2(gen));
+
+                while (uniqueOptions.size() < 4) {
+                    uniqueOptions.insert(dis2(gen));
+                }
+
+                auto it = uniqueOptions.begin();
+                int randomoption2 = *it++;
+                int randomoption3 = *it++;
+                int randomoption4 = *it++;
+                int randomoption5 = *it++;
+
                 string option2text = EasyK[randomoption2 - 1];
                 string option3text = EasyK[randomoption3 - 1];
                 string option4text = EasyK[randomoption4 - 1];
                 string option5text = EasyK[randomoption5 - 1];
+
+
 
                 switch (randomPos)
                 {
