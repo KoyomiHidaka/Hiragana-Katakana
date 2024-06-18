@@ -277,8 +277,8 @@ int main() {
     
     //string selectedQuestionableGlyph;
     string selectedAnswerforGlyph;
-    int counter_wrong;
-    int counter_right;
+    int counter_wrong = 0;
+    int counter_right = 0;
  
 
     bot.getEvents().onCallbackQuery([&bot, &selectedAnswerforGlyph](CallbackQuery::Ptr query) {
@@ -334,11 +334,11 @@ int main() {
                 int randomoption3 = *it++;
                 int randomoption4 = *it++;
                 int randomoption5 = *it++;
-
-                string option2text = EasyK[randomoption2 - 1];
-                string option3text = EasyK[randomoption3 - 1];
-                string option4text = EasyK[randomoption4 - 1];
-                string option5text = EasyK[randomoption5 - 1];
+                cout << randomoption2 << randomoption3 << randomoption4 << randomoption5 << endl;
+                string option2text = EasyK[randomoption2];
+                string option3text = EasyK[randomoption3];
+                string option4text = EasyK[randomoption4];
+                string option5text = EasyK[randomoption5];
 
 
 
@@ -542,7 +542,8 @@ int main() {
             }
             if (query->data == "completethetest")
             {
-                bot.getApi().sendMessage(query->message->chat->id, "Количество набранных баллов: " + counter_right);
+                string resultMessage = "Количество правильных ответов: " + to_string(counter_right) +"/20";
+                bot.getApi().sendMessage(query->message->chat->id, resultMessage);
             }
             });
 
@@ -589,14 +590,23 @@ int main() {
                     uniform_int_distribution<> dis1(1, 5);
                     uniform_int_distribution<> dis2(1, 20);
                     int randomPos = dis1(gen);
-                    int randomoption2 = dis2(gen);
-                    int randomoption3 = dis2(gen);
-                    int randomoption4 = dis2(gen);
-                    int randomoption5 = dis2(gen);
-                    string option2text = EasyK[randomoption2];
-                    string option3text = EasyK[randomoption3];
-                    string option4text = EasyK[randomoption4];
-                    string option5text = EasyK[randomoption5];
+                    set<int> uniqueOptions;
+                    uniqueOptions.insert(dis2(gen));
+
+                    while (uniqueOptions.size() < 4) {
+                        uniqueOptions.insert(dis2(gen));
+                    }
+
+                    auto it = uniqueOptions.begin();
+                    int randomoption2 = *it++;
+                    int randomoption3 = *it++;
+                    int randomoption4 = *it++;
+                    int randomoption5 = *it++;
+                    cout << randomoption2 << endl << randomoption3 << endl << randomoption4 << endl << randomoption5 << endl;
+                    string option2text = EasyK[randomoption2 - 1];
+                    string option3text = EasyK[randomoption3 - 1];
+                    string option4text = EasyK[randomoption4 - 1];
+                    string option5text = EasyK[randomoption5 - 1];
 
                     switch (randomPos)
                     {
