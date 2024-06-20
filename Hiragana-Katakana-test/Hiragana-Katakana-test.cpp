@@ -304,20 +304,6 @@ int main() {
                 InlineKeyboardButton::Ptr finish(new InlineKeyboardButton);
 
 
-                //random_device rd;
-                //mt19937 gen(rd());
-                //uniform_int_distribution<> dis1(1, 5);
-                //uniform_int_distribution<> dis2(1, 20);
-                //int randomPos = dis1(gen);
-                //int randomoption2 = dis2(gen);
-                //int randomoption3 = dis2(gen);
-                //int randomoption4 = dis2(gen);
-                //int randomoption5 = dis2(gen);
-                //string option2text = EasyK[randomoption2 - 1];
-                //string option3text = EasyK[randomoption3 - 1];
-                //string option4text = EasyK[randomoption4 - 1];
-                //string option5text = EasyK[randomoption5 - 1];
-
                 random_device rd;
                 mt19937 gen(rd());
                 uniform_int_distribution<> dis1(1, 5);
@@ -326,9 +312,11 @@ int main() {
                 set<int> uniqueOptions;
                 uniqueOptions.insert(randomKeyfromVector);
 
-                while (uniqueOptions.size() < 5) {
+                while (uniqueOptions.size() < 5) { // Changed to 5 to include randomKeyfromVector
                     int randomNumber = dis2(gen);
-                    uniqueOptions.insert(randomNumber);
+                    if (randomNumber != randomKeyfromVector) {
+                        uniqueOptions.insert(randomNumber);
+                    }
                 }
 
                 auto it = uniqueOptions.begin();
@@ -336,13 +324,42 @@ int main() {
                 int randomoption3 = *it++;
                 int randomoption4 = *it++;
                 int randomoption5 = *it++;
+                cout << randomKeyfromVector << endl;
                 cout << randomoption2 << endl << randomoption3 << endl << randomoption4 << endl << randomoption5 << endl;
-                string option2text = EasyK[randomoption2];
+
+
+
+                if (randomoption2 == randomKeyfromVector)
+                {
+                    randomoption2 = dis2(gen);
+                }
+                if (randomoption3 == randomKeyfromVector)
+                {
+                    randomoption3 = dis2(gen);
+                }
+                if (randomoption4 == randomKeyfromVector)
+                {
+                    randomoption4 = dis2(gen);
+                }
+                if (randomoption5 == randomKeyfromVector)
+                {
+                    randomoption5 = dis2(gen);
+                }
+
+
+               cout << "--------------Refresh---------------" << endl;
+               cout << randomoption2 << endl << randomoption3 << endl << randomoption4 << endl << randomoption5 << endl;
+
+
+
+
+
+                string option2text = EasyK[randomoption2]; // Adjusted to use correct index
                 string option3text = EasyK[randomoption3];
                 string option4text = EasyK[randomoption4];
                 string option5text = EasyK[randomoption5];
 
-
+                
 
                 switch (randomPos)
                 {
@@ -494,7 +511,7 @@ int main() {
                 }
                 bot.getApi().sendMessage(query->message->chat->id, selectedQuestionableGlyph, false, 0, EasyK_kb);
                 ++currentIndex;
-
+                bot.getApi().answerCallbackQuery(query->id, " ");
             }
             else
             {
@@ -544,8 +561,32 @@ int main() {
             }
             if (query->data == "completethetest")
             {
+                InlineKeyboardMarkup::Ptr again_kb(new InlineKeyboardMarkup);
+                InlineKeyboardButton::Ptr again_yes(new InlineKeyboardButton);
+                InlineKeyboardButton::Ptr again_no(new InlineKeyboardButton);
+                again_yes->text = "Еще раз!";
+                again_yes->callbackData = "again_yes";
+                again_kb->inlineKeyboard.push_back({ again_yes });
+                again_no->text = "Не, в другой раз";
+                again_no->callbackData = "again_no";
+                again_kb->inlineKeyboard.push_back({ again_no });
+
                 string resultMessage = "Количество правильных ответов: " + to_string(counter_right) +"/20";
+                string again_or_Not = "Хотите начать еще раз?";
                 bot.getApi().sendMessage(query->message->chat->id, resultMessage);
+                bot.getApi().sendMessage(query->message->chat->id, again_or_Not, 0, false, again_kb);
+                bot.getApi().answerCallbackQuery(query->id, " ");
+            }
+            });
+
+
+
+
+        bot.getEvents().onCallbackQuery([&bot](CallbackQuery::Ptr query) {
+            if (query->data == "again_no")
+            {
+                bot.getApi().sendMessage(query->message->chat->id, "Хорошего дня!");
+                bot.getApi().answerCallbackQuery(query->id, " ");
             }
             });
 
@@ -560,14 +601,9 @@ int main() {
 
 
 
-
-
-
-
-
         bot.getEvents().onCallbackQuery([&bot](CallbackQuery::Ptr query) {
 
-            if ((query->data == "nextQuestion") || (query->data == "RightAnswer") || (query->data == "WrongAnswer02") || (query->data == "WrongAnswer03") || (query->data == "WrongAnswer04") || (query->data == "WrongAnswer05"))
+            if ((query->data == "nextQuestion") || (query->data == "RightAnswer") || (query->data == "WrongAnswer02") || (query->data == "WrongAnswer03") || (query->data == "WrongAnswer04") || (query->data == "WrongAnswer05") || (query->data == "again_yes"))
             {
                 if (currentIndex < keys.size())
                 {
@@ -596,9 +632,11 @@ int main() {
                     set<int> uniqueOptions;
                     uniqueOptions.insert(randomKeyfromVector);
 
-                    while (uniqueOptions.size() < 5) {
+                    while (uniqueOptions.size() < 5) { // Changed to 5 to include randomKeyfromVector
                         int randomNumber = dis2(gen);
-                        uniqueOptions.insert(randomNumber);
+                        if (randomNumber != randomKeyfromVector) {
+                            uniqueOptions.insert(randomNumber);
+                        }
                     }
 
                     auto it = uniqueOptions.begin();
@@ -606,7 +644,68 @@ int main() {
                     int randomoption3 = *it++;
                     int randomoption4 = *it++;
                     int randomoption5 = *it++;
+                    cout << randomKeyfromVector << "Question" << endl;
+                    cout << "-------" << endl;
                     cout << randomoption2 << endl << randomoption3 << endl << randomoption4 << endl << randomoption5 << endl;
+
+                    while ((randomoption2 == randomKeyfromVector) || (randomoption2 == randomoption3) || (randomoption2 == randomoption4) || (randomoption2 == randomoption5))
+                    {
+                        randomoption2 = dis2(gen);
+                        if ((randomoption2 != randomKeyfromVector) && (randomoption2 != randomoption3) && (randomoption2 != randomoption4) && (randomoption2 != randomoption5))
+                        {
+                            break;
+                        }
+                    }
+                    while ((randomoption3 == randomKeyfromVector) || (randomoption3 == randomoption2) || (randomoption3 == randomoption4) || (randomoption3 == randomoption5))
+                    {
+                        randomoption3 = dis2(gen);
+                        if ((randomoption3 != randomKeyfromVector) && (randomoption3 != randomoption2) && (randomoption3 != randomoption4) && (randomoption3 != randomoption5))
+                        {
+                            break;
+                        }
+                    }
+                    while ((randomoption4 == randomKeyfromVector) || (randomoption4 == randomoption3) || (randomoption4 == randomoption2) || (randomoption4 == randomoption5))
+                    {
+                        randomoption4 = dis2(gen);
+                        if ((randomoption4 != randomKeyfromVector) && (randomoption4 != randomoption2) && (randomoption4 != randomoption3) && (randomoption4 != randomoption5))
+                        {
+                            break;
+                        }
+                    }
+                    while ((randomoption5 == randomKeyfromVector) || (randomoption5 == randomoption3) || (randomoption5 == randomoption4) || (randomoption5 == randomoption2))
+                    {
+                        randomoption5 = dis2(gen);
+                        if ((randomoption5 != randomKeyfromVector) && (randomoption5 != randomoption2) && (randomoption5 != randomoption4) && (randomoption5 != randomoption3))
+                        {
+                            break;
+                        }
+                    }
+
+                    //if (randomoption2 == randomKeyfromVector)
+                    //{
+                    //    randomoption2 = dis2(gen);
+                    //}
+                    //if (randomoption3 == randomKeyfromVector)
+                    //{
+                    //    randomoption3 = dis2(gen);
+                    //}
+                    //if (randomoption4 == randomKeyfromVector)
+                    //{
+                    //    randomoption4 = dis2(gen);
+                    //}
+                    //if (randomoption5 == randomKeyfromVector)
+                    //{
+                    //    randomoption5 = dis2(gen);
+                    //}
+
+
+                    cout << "--------------Refresh---------------" << endl;
+                    cout << randomoption2 << endl << randomoption3 << endl << randomoption4 << endl << randomoption5 << endl;
+
+
+
+
+
                     string option2text = EasyK[randomoption2];
                     string option3text = EasyK[randomoption3];
                     string option4text = EasyK[randomoption4];
@@ -762,6 +861,8 @@ int main() {
                     }
                     bot.getApi().sendMessage(query->message->chat->id, selectedQuestionableGlyph, false, 0, EasyK_kb);
                     ++currentIndex;
+
+                    bot.getApi().answerCallbackQuery(query->id, " ");
 
                 }
             }
