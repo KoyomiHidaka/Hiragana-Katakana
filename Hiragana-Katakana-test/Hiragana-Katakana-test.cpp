@@ -243,7 +243,7 @@ int main() {
             keyboard->inlineKeyboard.push_back(row);
 
             bot.getApi().editMessageText("Select difficult", query->message->chat->id, query->message->messageId, "", "Markdown", false, keyboard);
-            bot.getApi().answerCallbackQuery(query->id, " ");
+            bot.getApi().answerCallbackQuery(query->id, "good luck", false);
 
             
         }
@@ -326,6 +326,7 @@ int main() {
     string selectedAnswerforGlyph;
     int counter_wrong = 0;
     int counter_right = 0;
+    int skipped = 0;
  
 
     bot.getEvents().onCallbackQuery([&bot, &selectedAnswerforGlyph](CallbackQuery::Ptr query) {
@@ -886,7 +887,7 @@ int main() {
         bot.getEvents().onCallbackQuery([&bot](CallbackQuery::Ptr query) {
             if (query->data == "again_no")
             {
-                bot.getApi().sendMessage(query->message->chat->id, "Хорошего дня!");
+                bot.getApi().editMessageText("Хорошего дня!", query->message->chat->id, query->message->messageId);
                 bot.getApi().answerCallbackQuery(query->id, " ");
             }
             });
@@ -1163,9 +1164,10 @@ int main() {
                     bot.getApi().sendMessage(query->message->chat->id, selectedQuestionableGlyph, false, 0, EasyK_kb);
                     ++currentIndex;
 
-                    bot.getApi().answerCallbackQuery(query->id, " ");
+                    
 
                 }
+                bot.getApi().answerCallbackQuery(query->id, " ");
             }
         });
 
@@ -1433,7 +1435,7 @@ int main() {
                         bot.getApi().editMessageText(selectedQuestionableGlyph, query->message->chat->id, query->message->messageId, "", "Markdown", false, EasyK_kb);
                         ++currentIndexh;
 
-                        bot.getApi().answerCallbackQuery(query->id, " ");
+                        //bot.getApi().answerCallbackQuery(query->id, " ");
 
                     }
                 }
@@ -1441,25 +1443,26 @@ int main() {
             });
         
 
-                bot.getEvents().onCallbackQuery([&bot, &selectedAnswerforGlyph, &counter_right, &counter_wrong](CallbackQuery::Ptr query) {
+                bot.getEvents().onCallbackQuery([&bot, &selectedAnswerforGlyph, &counter_right, &counter_wrong, &skipped](CallbackQuery::Ptr query) {
 
 
                     if (query->data == "RightAnswerh")
                     {
-                        bot.getApi().sendMessage(query->message->chat->id, "Correct");
-                        //bot.getApi().answerCallbackQuery(query->id, "Correct", true, "", 0);
+                       
+                        bot.getApi().answerCallbackQuery(query->id, "Correct", false);
                         counter_right += 1;
                     }
                     if ((query->data == "WrongAnswer02h") || (query->data == "WrongAnswer03h") || (query->data == "WrongAnswer04h") || (query->data == "WrongAnswer05h"))
                     {
                         
-                        bot.getApi().sendMessage(query->message->chat->id, "Incorrect");
+                        bot.getApi().answerCallbackQuery(query->id, "Incorrect", false);
                         counter_wrong += 1;
 
                     }
                     if (query->data == "nextQuestionh")
                     {
-
+                        bot.getApi().answerCallbackQuery(query->id, "Skipped", false);
+                        skipped += 1;
                     }
                     if (query->data == "helpWithTesth")
                     {
@@ -1479,7 +1482,7 @@ int main() {
                         again_no->callbackData = "again_no";
                         again_kb->inlineKeyboard.push_back({ again_no });
 
-                        string resultMessage = "Количество правильных ответов: " + to_string(counter_right) + "/20";
+                        string resultMessage = "Количество правильных ответов: " + to_string(counter_right) + "/20" + "Пропущено вопросов: " + to_string(skipped);
                         string again_or_Not = "Хотите начать еще раз?";
                         bot.getApi().sendMessage(query->message->chat->id, resultMessage);
                         bot.getApi().sendMessage(query->message->chat->id, again_or_Not, 0, false, again_kb);
