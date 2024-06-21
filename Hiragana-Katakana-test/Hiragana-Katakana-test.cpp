@@ -27,7 +27,7 @@ map<int, string> EasyK{
     {9, "ke"},
     {10, "ko"},
     {11, "sa"},
-    {12, "si"},
+    {12, "shi"},
     {13, "su"},
     {14, "se"},
     {15, "so"},
@@ -63,10 +63,34 @@ map<int, string> EasyK_Glyph{
     {20, "ト"}
 };
 
+map<int, string> EasyH_Glyph{
 
+    {1, "あ"},
+    {2, "い"},
+    {3, "う"},
+    {4, "え"},
+    {5, "お"},
+    {6, "か"},
+    {7, "き"},
+    {8, "く"},
+    {9, "け"},
+    {10, "こ"},
+    {11, "さ"},
+    {12, "し"},
+    {13, "す"},
+    {14, "せ"},
+    {15, "そ"},
+    {16, "た"},
+    {17, "ち"},
+    {18, "つ"},
+    {19, "て"},
+    {20, "と"}
+};
 
 vector<int> keys;
+vector<int> keysh;
 size_t currentIndex = 0;
+size_t currentIndexh = 0;
 
 
 
@@ -80,7 +104,14 @@ void initializeKeys() {
 
 }
 
-
+void initializeKeysH() {
+    for (const auto& pair : EasyH_Glyph) {
+        keysh.push_back(pair.first);
+    }
+    random_device rd;
+    mt19937 gen(rd());
+    shuffle(keysh.begin(), keysh.end(), gen);
+}
 
 
 
@@ -118,6 +149,9 @@ void initializeKeys() {
 
 int main() {
     initializeKeys();
+    initializeKeysH();
+
+
     Bot bot("7170257322:AAHG4-WJYFGR8_C43O8ChijxrBB-DEWvGN8");
 
 
@@ -184,6 +218,8 @@ int main() {
             keyboard->inlineKeyboard.push_back(row);
 
             bot.getApi().sendMessage(query->message->chat->id, "Select difficult", false, 0, keyboard);
+            bot.getApi().answerCallbackQuery(query->id, " ");
+
 
 
         }
@@ -207,6 +243,7 @@ int main() {
             keyboard->inlineKeyboard.push_back(row);
 
             bot.getApi().sendMessage(query->message->chat->id, "Select difficult", false, 0, keyboard);
+            bot.getApi().answerCallbackQuery(query->id, " ");
 
             
         }
@@ -228,6 +265,8 @@ int main() {
             keyboard->inlineKeyboard.push_back(row);
 
             bot.getApi().sendMessage(query->message->chat->id, "Hajimeru!", false, 0, keyboard);
+
+            bot.getApi().answerCallbackQuery(query->id, " ");
         }
         if (query->data == "HardK")
         {
@@ -241,8 +280,12 @@ int main() {
             row.push_back(hajimeru);
             keyboard->inlineKeyboard.push_back(row);
 
+            bot.getApi().answerCallbackQuery(query->id, " ");
+
 
             bot.getApi().sendMessage(query->message->chat->id, "Hajimeru!", false, 0, keyboard);
+
+            bot.getApi().answerCallbackQuery(query->id, " ");
         }
         if (query->data == "EasyH")
         {
@@ -257,6 +300,8 @@ int main() {
             keyboard->inlineKeyboard.push_back(row);
 
             bot.getApi().sendMessage(query->message->chat->id, "Hajimeru!", false, 0, keyboard);
+
+            bot.getApi().answerCallbackQuery(query->id, " ");
         }
         if (query->data == "HardH")
         {
@@ -271,6 +316,8 @@ int main() {
             keyboard->inlineKeyboard.push_back(row);
 
             bot.getApi().sendMessage(query->message->chat->id, "Hajimeru!", false, 0, keyboard);
+
+            bot.getApi().answerCallbackQuery(query->id, " ");
         }
         });
     
@@ -524,7 +571,238 @@ int main() {
         }
         if (query->data == "HajimeruEasyH")
         {
-            
+            if (currentIndexh < keysh.size())
+            {
+                int randomKeyfromVector = keysh[currentIndexh];
+                int operableNumber = randomKeyfromVector;
+                string selectedQuestionableGlyph = EasyH_Glyph[randomKeyfromVector]; // glyph To
+                string selectedAnswerforGlyph = EasyK[randomKeyfromVector];  // To 
+
+                InlineKeyboardMarkup::Ptr EasyK_kb(new InlineKeyboardMarkup);
+                InlineKeyboardButton::Ptr option1(new InlineKeyboardButton);
+                InlineKeyboardButton::Ptr option2(new InlineKeyboardButton);
+                InlineKeyboardButton::Ptr option3(new InlineKeyboardButton);
+                InlineKeyboardButton::Ptr option4(new InlineKeyboardButton);
+                InlineKeyboardButton::Ptr option5(new InlineKeyboardButton);
+                InlineKeyboardButton::Ptr divider(new InlineKeyboardButton);
+                InlineKeyboardButton::Ptr help(new InlineKeyboardButton);
+                InlineKeyboardButton::Ptr next(new InlineKeyboardButton);
+                InlineKeyboardButton::Ptr finish(new InlineKeyboardButton);
+
+
+                random_device rd;
+                mt19937 gen(rd());
+                uniform_int_distribution<> dis1(1, 5);
+                uniform_int_distribution<> dis2(1, 20);
+                int randomPos = dis1(gen);
+                set<int> uniqueOptions;
+                uniqueOptions.insert(randomKeyfromVector);
+
+                while (uniqueOptions.size() < 5) { // Changed to 5 to include randomKeyfromVector
+                    int randomNumber = dis2(gen);
+                    if (randomNumber != randomKeyfromVector) {
+                        uniqueOptions.insert(randomNumber);
+                    }
+                }
+
+                auto it = uniqueOptions.begin();
+                int randomoption2 = *it++;
+                int randomoption3 = *it++;
+                int randomoption4 = *it++;
+                int randomoption5 = *it++;
+                cout << randomKeyfromVector << endl;
+                cout << randomoption2 << endl << randomoption3 << endl << randomoption4 << endl << randomoption5 << endl;
+
+
+
+                if (randomoption2 == randomKeyfromVector)
+                {
+                    randomoption2 = dis2(gen);
+                }
+                if (randomoption3 == randomKeyfromVector)
+                {
+                    randomoption3 = dis2(gen);
+                }
+                if (randomoption4 == randomKeyfromVector)
+                {
+                    randomoption4 = dis2(gen);
+                }
+                if (randomoption5 == randomKeyfromVector)
+                {
+                    randomoption5 = dis2(gen);
+                }
+
+
+                cout << "--------------Refresh---------------" << endl;
+                cout << randomoption2 << endl << randomoption3 << endl << randomoption4 << endl << randomoption5 << endl;
+
+
+
+
+
+                string option2text = EasyK[randomoption2]; // Adjusted to use correct index
+                string option3text = EasyK[randomoption3];
+                string option4text = EasyK[randomoption4];
+                string option5text = EasyK[randomoption5];
+
+
+
+                switch (randomPos)
+                {
+                case 1:
+                    option1->text = selectedAnswerforGlyph;
+                    option1->callbackData = "RightAnswer";
+                    EasyK_kb->inlineKeyboard.push_back({ option1 });
+                    option2->text = option2text;
+                    option2->callbackData = "WrongAnswer02";
+                    EasyK_kb->inlineKeyboard.push_back({ option2 });
+                    option3->text = option3text;
+                    option3->callbackData = "WrongAnswer03";
+                    EasyK_kb->inlineKeyboard.push_back({ option3 });
+                    option4->text = option4text;
+                    option4->callbackData = "WrongAnswer04";
+                    EasyK_kb->inlineKeyboard.push_back({ option4 });
+                    option5->text = option5text;
+                    option5->callbackData = "WrongAnswer05";
+                    EasyK_kb->inlineKeyboard.push_back({ option5 });
+                    divider->text = "-------------------";
+                    divider->callbackData = "------------------";
+                    EasyK_kb->inlineKeyboard.push_back({ divider });
+                    help->text = "Click if you don`t know";
+                    help->callbackData = "helpWithTest";
+                    EasyK_kb->inlineKeyboard.push_back({ help });
+                    next->text = "Next";
+                    next->callbackData = "nextQuestion";
+                    EasyK_kb->inlineKeyboard.push_back({ next });
+                    finish->text = "Complete The Test";
+                    finish->callbackData = "completethetest";
+                    EasyK_kb->inlineKeyboard.push_back({ finish });
+                    break;
+                case 2:
+                    option2->text = option2text;
+                    option2->callbackData = "WrongAnswer02";
+                    EasyK_kb->inlineKeyboard.push_back({ option2 });
+                    option1->text = selectedAnswerforGlyph;
+                    option1->callbackData = "RightAnswer";
+                    EasyK_kb->inlineKeyboard.push_back({ option1 });
+                    option3->text = option3text;
+                    option3->callbackData = "WrongAnswer03";
+                    EasyK_kb->inlineKeyboard.push_back({ option3 });
+                    option4->text = option4text;
+                    option4->callbackData = "WrongAnswer04";
+                    EasyK_kb->inlineKeyboard.push_back({ option4 });
+                    option5->text = option5text;
+                    option5->callbackData = "WrongAnswer05";
+                    EasyK_kb->inlineKeyboard.push_back({ option5 });
+                    divider->text = "-------------------";
+                    divider->callbackData = "------------------";
+                    EasyK_kb->inlineKeyboard.push_back({ divider });
+                    help->text = "Click if you don`t know";
+                    help->callbackData = "helpWithTest";
+                    EasyK_kb->inlineKeyboard.push_back({ help });
+                    next->text = "Next";
+                    next->callbackData = "nextQuestion";
+                    EasyK_kb->inlineKeyboard.push_back({ next });
+                    finish->text = "Complete The Test";
+                    finish->callbackData = "completethetest";
+                    EasyK_kb->inlineKeyboard.push_back({ finish });
+                    break;
+                case 3:
+                    option2->text = option2text;
+                    option2->callbackData = "WrongAnswer02";
+                    EasyK_kb->inlineKeyboard.push_back({ option2 });
+                    option3->text = option3text;
+                    option3->callbackData = "WrongAnswer03";
+                    EasyK_kb->inlineKeyboard.push_back({ option3 });
+                    option1->text = selectedAnswerforGlyph;
+                    option1->callbackData = "RightAnswer";
+                    EasyK_kb->inlineKeyboard.push_back({ option1 });
+                    option4->text = option4text;
+                    option4->callbackData = "WrongAnswer04";
+                    EasyK_kb->inlineKeyboard.push_back({ option4 });
+                    option5->text = option5text;
+                    option5->callbackData = "WrongAnswer05";
+                    EasyK_kb->inlineKeyboard.push_back({ option5 });
+                    divider->text = "-------------------";
+                    divider->callbackData = "------------------";
+                    EasyK_kb->inlineKeyboard.push_back({ divider });
+                    help->text = "Click if you don`t know";
+                    help->callbackData = "helpWithTest";
+                    EasyK_kb->inlineKeyboard.push_back({ help });
+                    next->text = "Next";
+                    next->callbackData = "nextQuestion";
+                    EasyK_kb->inlineKeyboard.push_back({ next });
+                    finish->text = "Complete The Test";
+                    finish->callbackData = "completethetest";
+                    EasyK_kb->inlineKeyboard.push_back({ finish });
+                    break;
+                case 4:
+                    option2->text = option2text;
+                    option2->callbackData = "WrongAnswer02";
+                    EasyK_kb->inlineKeyboard.push_back({ option2 });
+                    option3->text = option3text;
+                    option3->callbackData = "WrongAnswer03";
+                    EasyK_kb->inlineKeyboard.push_back({ option3 });
+                    option4->text = option4text;
+                    option4->callbackData = "WrongAnswer04";
+                    EasyK_kb->inlineKeyboard.push_back({ option4 });
+                    option1->text = selectedAnswerforGlyph;
+                    option1->callbackData = "RightAnswer";
+                    EasyK_kb->inlineKeyboard.push_back({ option1 });
+                    option5->text = option5text;
+                    option5->callbackData = "WrongAnswer05";
+                    EasyK_kb->inlineKeyboard.push_back({ option5 });
+                    divider->text = "-------------------";
+                    divider->callbackData = "------------------";
+                    EasyK_kb->inlineKeyboard.push_back({ divider });
+                    help->text = "Click if you don`t know";
+                    help->callbackData = "helpWithTest";
+                    EasyK_kb->inlineKeyboard.push_back({ help });
+                    next->text = "Next";
+                    next->callbackData = "nextQuestion";
+                    EasyK_kb->inlineKeyboard.push_back({ next });
+                    finish->text = "Complete The Test";
+                    finish->callbackData = "completethetest";
+                    EasyK_kb->inlineKeyboard.push_back({ finish });
+                    break;
+                case 5:
+                    option2->text = option2text;
+                    option2->callbackData = "WrongAnswer02";
+                    EasyK_kb->inlineKeyboard.push_back({ option2 });
+                    option3->text = option3text;
+                    option3->callbackData = "WrongAnswer03";
+                    EasyK_kb->inlineKeyboard.push_back({ option3 });
+                    option4->text = option4text;
+                    option4->callbackData = "WrongAnswer04";
+                    EasyK_kb->inlineKeyboard.push_back({ option4 });
+                    option5->text = option5text;
+                    option5->callbackData = "WrongAnswer05";
+                    EasyK_kb->inlineKeyboard.push_back({ option5 });
+                    option1->text = selectedAnswerforGlyph;
+                    option1->callbackData = "RightAnswer";
+                    EasyK_kb->inlineKeyboard.push_back({ option1 });
+                    divider->text = "-------------------";
+                    divider->callbackData = "------------------";
+                    EasyK_kb->inlineKeyboard.push_back({ divider });
+                    help->text = "Click if you don`t know";
+                    help->callbackData = "helpWithTest";
+                    EasyK_kb->inlineKeyboard.push_back({ help });
+                    next->text = "Next";
+                    next->callbackData = "nextQuestion";
+                    EasyK_kb->inlineKeyboard.push_back({ next });
+                    finish->text = "Complete The Test";
+                    finish->callbackData = "completethetest";
+                    EasyK_kb->inlineKeyboard.push_back({ finish });
+                    break;
+                }
+                bot.getApi().editMessageText(selectedQuestionableGlyph, query->message->chat->id, query->message->messageId,  "", "Markdown", false, EasyK_kb);
+                ++currentIndex;
+                bot.getApi().answerCallbackQuery(query->id, " ");
+            }
+            else
+            {
+                bot.getApi().sendMessage(query->message->chat->id, "Тест завершен результат: "); //добавить скольок из скольки было верно отвечено
+            }
         }
         if (query->data == "HajimeruHardH")
         {
@@ -558,6 +836,7 @@ int main() {
             {
                 bot.getApi().sendMessage(query->message->chat->id, "Правильный ответ был: " + selectedAnswerforGlyph);
                 counter_wrong+=1;
+                bot.getApi().answerCallbackQuery(query->id, " ");
             }
             if (query->data == "completethetest")
             {
