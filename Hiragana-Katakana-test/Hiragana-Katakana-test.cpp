@@ -52,7 +52,7 @@ map<int, string> EasyK_Glyph{
     {9, "ケ"},
     {10, "コ"},
     {11, "サ"},
-    {12, "si"},
+    {12, "ツ"},
     {13, "ス"},
     {14, "セ"},
     {15, "ソ"},
@@ -91,6 +91,7 @@ vector<int> keys;
 vector<int> keysh;
 size_t currentIndex = 0;
 size_t currentIndexh = 0;
+int randomKeyfromVector = 0;
 
 
 
@@ -154,10 +155,10 @@ int main() {
 
     Bot bot("7170257322:AAHG4-WJYFGR8_C43O8ChijxrBB-DEWvGN8");
 
-
+   
 
     bot.getEvents().onCommand("start", [&bot](TgBot::Message::Ptr message) {
-        bot.getApi().sendMessage(message->chat->id, "Hello!");
+        bot.getApi().sendMessage(message->chat->id, "Hello! ✨");
 
         InlineKeyboardMarkup::Ptr keyboard(new InlineKeyboardMarkup);
 
@@ -171,7 +172,7 @@ int main() {
         button2->callbackData = "Hiragana";
 
 
-
+        // Comment
 
 
 
@@ -568,9 +569,9 @@ int main() {
                         EasyK_kb->inlineKeyboard.push_back({ finish });
                         break;
                 }
-                bot.getApi().sendMessage(query->message->chat->id, selectedQuestionableGlyph, false, 0, EasyK_kb);
+                bot.getApi().editMessageText(selectedQuestionableGlyph, query->message->chat->id, query->message->messageId, "", "Markdown", false, EasyK_kb);
                 ++currentIndex;
-                bot.getApi().answerCallbackQuery(query->id, " ");
+                //bot.getApi().answerCallbackQuery(query->id, " ");
             }
             else
             {
@@ -837,23 +838,24 @@ int main() {
 
 
 
-        bot.getEvents().onCallbackQuery([&bot, &selectedAnswerforGlyph, &counter_right, &counter_wrong](CallbackQuery::Ptr query) {
+        bot.getEvents().onCallbackQuery([&bot, &selectedAnswerforGlyph, &counter_right, &counter_wrong, &skipped](CallbackQuery::Ptr query) {
 
 
             if (query->data == "RightAnswer")
             {
-                bot.getApi().sendMessage(query->message->chat->id, "Correct");
+                bot.getApi().answerCallbackQuery(query->id, "Correct", false);
                 counter_right+=1;
             }
             if ((query->data == "WrongAnswer02") || (query->data == "WrongAnswer03") || (query->data == "WrongAnswer04") || (query->data == "WrongAnswer05"))
             {
-                bot.getApi().sendMessage(query->message->chat->id, "Incorrect");
+                bot.getApi().answerCallbackQuery(query->id, "Incorrect", false);
                 counter_wrong+=1;
 
             }
             if (query->data == "nextQuestion")
             {
-
+                bot.getApi().answerCallbackQuery(query->id, "Skipped", false);
+                skipped += 1;
             }
             if (query->data == "helpWithTest")
             {
@@ -873,7 +875,7 @@ int main() {
                 again_no->callbackData = "again_no";
                 again_kb->inlineKeyboard.push_back({ again_no });
 
-                string resultMessage = "Количество правильных ответов: " + to_string(counter_right) +"/20";
+                string resultMessage = "Количество правильных ответов: " + to_string(counter_right) + "/20" + "Количество пропущенных вопросов: " + to_string(skipped);
                 string again_or_Not = "Хотите начать еще раз?";
                 bot.getApi().sendMessage(query->message->chat->id, resultMessage);
                 bot.getApi().sendMessage(query->message->chat->id, again_or_Not, 0, false, again_kb);
@@ -1161,18 +1163,18 @@ int main() {
                         EasyK_kb->inlineKeyboard.push_back({ finish });
                         break;
                     }
-                    bot.getApi().sendMessage(query->message->chat->id, selectedQuestionableGlyph, false, 0, EasyK_kb);
+                    bot.getApi().editMessageText(selectedQuestionableGlyph, query->message->chat->id, query->message->messageId, "", "Markdown", false, EasyK_kb);
                     ++currentIndex;
 
                     
 
                 }
-                bot.getApi().answerCallbackQuery(query->id, " ");
+                //bot.getApi().answerCallbackQuery(query->id, " ");
             }
         });
 
 
-
+        //string selectedAnswerforGlyph = " ";
 
             bot.getEvents().onCallbackQuery([&bot](CallbackQuery::Ptr query) {
 
@@ -1449,7 +1451,7 @@ int main() {
                     if (query->data == "RightAnswerh")
                     {
                        
-                        bot.getApi().answerCallbackQuery(query->id, "Correct", false);
+                        bot.getApi().answerCallbackQuery(query->id, "✨Correct✨", false);
                         counter_right += 1;
                     }
                     if ((query->data == "WrongAnswer02h") || (query->data == "WrongAnswer03h") || (query->data == "WrongAnswer04h") || (query->data == "WrongAnswer05h"))
@@ -1466,7 +1468,9 @@ int main() {
                     }
                     if (query->data == "helpWithTesth")
                     {
-                        bot.getApi().sendMessage(query->message->chat->id, "Правильный ответ был: " + selectedAnswerforGlyph);
+                        string right_answer = to_string(keysh[currentIndexh]);
+                        cout << right_answer;
+                        bot.getApi().sendMessage(query->message->chat->id, "Правильный ответ был: " + right_answer);
                         counter_wrong += 1;
                         bot.getApi().answerCallbackQuery(query->id, " ");
                     }
